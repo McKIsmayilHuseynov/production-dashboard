@@ -141,7 +141,7 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
               <LabelList
                 dataKey="today"
                 position="right"
-                formatter={(v: number) => v.toLocaleString()}
+                formatter={(v: number) => fmtK(v)}
                 style={{ fill: colors.textSecondary, fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-sans)' }}
               />
             </Bar>
