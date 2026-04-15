@@ -2,6 +2,7 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  LabelList,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -94,7 +95,15 @@ export function TrendAnalysisCard({ title, kpis, trend, accentColor, fillColor }
               strokeLinejoin="round"
               fill={`url(#${gradientId})`}
               animationDuration={800}
-            />
+            >
+              <LabelList
+                dataKey="value"
+                position="top"
+                formatter={fmtK}
+                style={{ fill: colors.textSecondary, fontSize: 9, fontWeight: 600, fontFamily: 'var(--font-sans)' }}
+                offset={6}
+              />
+            </Area>
           </AreaChart>
         </ResponsiveContainer>
       </div>
