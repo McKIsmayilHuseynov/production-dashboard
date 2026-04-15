@@ -6,7 +6,7 @@ interface Props {
   kpis: ProductKpis;
 }
 
-const MINT = '#34B78F';
+const BLUE_MID = '#4A90C4';
 
 function MetricBlock({ label, value, unit, pct, barColor }: {
   label: string; value: string; unit: string; pct: number; barColor: string;
@@ -15,7 +15,7 @@ function MetricBlock({ label, value, unit, pct, barColor }: {
     <div className="flex-1" style={{ padding: '8px 0' }}>
       <div className="flex items-center justify-between" style={{ marginBottom: 2 }}>
         <span
-          className="text-[0.5625rem] font-bold tracking-[0.06em] uppercase"
+          className="text-[0.5625rem] font-bold tracking-[0.04em]"
           style={{ color: colors.textMuted }}
         >
           {label}
@@ -84,11 +84,11 @@ export function SecondaryKpiCard({ title, kpis }: Props) {
         />
         <div style={{ width: 1, backgroundColor: colors.divider, alignSelf: 'stretch', margin: '4px 0' }} />
         <MetricBlock
-          label="YTD Average"
+          label="YTD average"
           value={kpis.ytdAvg.toLocaleString()}
           unit={kpis.unit}
           pct={(kpis.ytdAvg / plan) * 100}
-          barColor={MINT}
+          barColor={BLUE_MID}
         />
         <div style={{ width: 1, backgroundColor: colors.divider, alignSelf: 'stretch', margin: '4px 0' }} />
         <MetricBlock

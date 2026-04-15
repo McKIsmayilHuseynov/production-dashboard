@@ -58,27 +58,23 @@ export function DataHealthPanel({ items }: Props) {
       }}
     >
       <div
-        className="flex items-center gap-2 shrink-0"
-        style={{ padding: '8px 12px', borderBottom: `1px solid ${colors.divider}` }}
-      >
-        <HealthIcon />
-        <h3
-          className="text-[0.75rem] font-bold tracking-[0.02em]"
-          style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
-        >
-          Data Health
-        </h3>
-      </div>
-
-      <div
         className="flex-1 flex flex-col justify-between"
-        style={{ padding: '4px 12px' }}
+        style={{ padding: '6px 12px' }}
       >
+        <div className="flex items-center gap-2">
+          <HealthIcon />
+          <h3
+            className="text-[0.75rem] font-bold tracking-[0.02em]"
+            style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
+          >
+            Data health
+          </h3>
+        </div>
+
         {items.map((item) => (
           <div
             key={item.asset}
             className="flex items-center justify-between"
-            style={{ padding: '3px 0' }}
           >
             <span
               className="truncate text-[0.6875rem] font-bold"

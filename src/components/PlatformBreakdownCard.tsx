@@ -145,7 +145,7 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
                       {p.today.toLocaleString()} {unit}
                     </div>
                     <div style={{ fontSize: 11, fontWeight: 600, color: pct >= 0 ? '#34B78F' : colors.negative, marginTop: 2 }}>
-                      {pct >= 0 ? '+' : ''}{pct.toFixed(1)}% vs YTD
+                      {pct >= 0 ? '+' : ''}{pct.toFixed(1)}% vs YTD avg
                     </div>
                   </div>
                 );

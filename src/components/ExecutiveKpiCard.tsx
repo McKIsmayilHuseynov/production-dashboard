@@ -33,8 +33,8 @@ export function ExecutiveKpiCard({ label, kpis, accentColor, type }: Props) {
   void accentColor;
   return (
     <CardShell variant="elevated">
-      <div style={{ padding: '12px 16px' }}>
-        <div className="flex items-center gap-2" style={{ marginBottom: 8 }}>
+      <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
+        <div className="flex items-center gap-2">
           {type === 'oil' ? <OilIcon /> : <GasIcon />}
           <span
             className="text-[0.9375rem] font-bold tracking-[0.02em]"
@@ -44,31 +44,32 @@ export function ExecutiveKpiCard({ label, kpis, accentColor, type }: Props) {
           </span>
         </div>
 
-        <div className="flex items-baseline gap-2">
-          <span
-            className="tabular-nums text-[2rem] font-bold leading-none"
-            style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
-          >
-            {kpis.last24h.toLocaleString()}
-          </span>
-          <span
-            className="text-[0.75rem] font-medium"
-            style={{ color: colors.textMuted }}
-          >
-            {kpis.unit}
-          </span>
-        </div>
-
-        <div style={{ marginTop: 6 }}>
-          <span
-            className="tabular-nums text-[0.75rem] font-semibold"
-            style={{ color: kpis.delta24h >= 0 ? MINT : colors.negative }}
-          >
-            {kpis.delta24h >= 0 ? '+' : ''}{Math.abs(kpis.delta24h).toFixed(1)}%
-          </span>
-          <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted, marginLeft: 4 }}>
-            vs yesterday
-          </span>
+        <div className="flex flex-col items-end">
+          <div className="flex items-baseline gap-1.5">
+            <span
+              className="tabular-nums text-[2rem] font-bold leading-none"
+              style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
+            >
+              {kpis.last24h.toLocaleString()}
+            </span>
+            <span
+              className="text-[0.75rem] font-medium"
+              style={{ color: colors.textMuted }}
+            >
+              {kpis.unit}
+            </span>
+          </div>
+          <div style={{ marginTop: 4 }}>
+            <span
+              className="tabular-nums text-[0.75rem] font-semibold"
+              style={{ color: kpis.delta24h >= 0 ? MINT : colors.negative }}
+            >
+              {kpis.delta24h >= 0 ? '+' : ''}{Math.abs(kpis.delta24h).toFixed(1)}%
+            </span>
+            <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted, marginLeft: 4 }}>
+              vs yesterday
+            </span>
+          </div>
         </div>
       </div>
     </CardShell>

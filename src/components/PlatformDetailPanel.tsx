@@ -8,7 +8,7 @@ interface Props {
   onClose: () => void;
 }
 
-const MINT = '#34B78F';
+const BLUE_MID = '#4A90C4';
 
 const panelColors = {
   bg: '#0E1E33',
@@ -17,6 +17,9 @@ const panelColors = {
   divider: '#1E4468',
   accent: '#6BB3E8',
 };
+
+const OIL_BAR = '#3D7AB5';
+const GAS_BAR = '#A8D8F0';
 
 function PlatformIcon() {
   return (
@@ -54,7 +57,7 @@ function KpiHero({ label, value, unit, delta, deltaLabel }: {
         borderRadius: 0,
       }}
     >
-      <span className="text-[0.5625rem] font-bold tracking-[0.06em] uppercase" style={{ color: colors.textMuted }}>
+      <span className="text-[0.5625rem] font-bold tracking-[0.04em]" style={{ color: colors.textMuted }}>
         {label}
       </span>
       <div className="flex items-baseline gap-2 mt-1">
@@ -64,7 +67,7 @@ function KpiHero({ label, value, unit, delta, deltaLabel }: {
         <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted }}>{unit}</span>
       </div>
       <div style={{ marginTop: 4 }}>
-        <span className="tabular-nums text-[0.6875rem] font-semibold" style={{ color: delta >= 0 ? MINT : colors.negative }}>
+        <span className="tabular-nums text-[0.6875rem] font-semibold" style={{ color: delta >= 0 ? '#34B78F' : colors.negative }}>
           {delta >= 0 ? '+' : ''}{delta.toFixed(1)}%
         </span>
         <span className="text-[0.625rem] font-medium" style={{ color: colors.textMuted, marginLeft: 4 }}>{deltaLabel}</span>
@@ -78,7 +81,7 @@ function MetricBlock({ label, value, unit, pct, barColor }: {
 }) {
   return (
     <div className="flex-1">
-      <span className="text-[0.5rem] font-bold tracking-[0.06em] uppercase block" style={{ color: colors.textMuted }}>
+      <span className="text-[0.5rem] font-bold tracking-[0.04em] block" style={{ color: colors.textMuted }}>
         {label}
       </span>
       <div className="flex items-baseline gap-1 mt-0.5">
@@ -128,14 +131,9 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
           >
             <PlatformIcon />
           </div>
-          <div>
-            <h2 className="text-[1.0625rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
-              {platform.name}
-            </h2>
-            <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted }}>
-              {type === 'oil' ? 'Oil' : 'Gas'} production deep dive
-            </span>
-          </div>
+          <h2 className="text-[1.0625rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
+            {platform.name}
+          </h2>
         </div>
         <button
           onClick={onClose}
@@ -157,17 +155,17 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
       {/* Content */}
       <div className="flex-1 overflow-y-auto" style={{ padding: '12px 20px 20px' }}>
 
-        {/* Section 1: Top hero KPIs — Total Oil + Total Gas */}
+        {/* Section 1: Top hero KPIs */}
         <div className="grid grid-cols-2" style={{ gap: 8, marginBottom: 10 }}>
           <KpiHero
-            label="Total Oil Production"
+            label="Total oil production"
             value={totalOil.toLocaleString()}
             unit="bbl/d"
             delta={oilDelta}
             deltaLabel="vs yesterday"
           />
           <KpiHero
-            label="Total Gas Production"
+            label="Total gas production"
             value={totalGas.toLocaleString()}
             unit="m³/d"
             delta={gasDelta}
@@ -175,7 +173,7 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
           />
         </div>
 
-        {/* Section 2: Yesterday / YTD / Target — Oil row + Gas row */}
+        {/* Section 2: Yesterday / YTD / Target */}
         <div
           className="card-hover"
           style={{
@@ -190,11 +188,11 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
               <path d="M12 2C12 2 6 10 6 14a6 6 0 0 0 12 0c0-4-6-12-6-12Z" fill={colors.oil} opacity={0.3} stroke={colors.oil} strokeWidth={1.5} />
             </svg>
-            <span className="text-[0.6875rem] font-bold" style={{ color: colors.oil }}>Oil Metrics</span>
+            <span className="text-[0.6875rem] font-bold" style={{ color: colors.oil }}>Oil metrics</span>
           </div>
           <div className="flex" style={{ gap: 16 }}>
             <MetricBlock label="Yesterday" value={platform.ytdAvg.toLocaleString()} unit="bbl/d" pct={(platform.ytdAvg / plan) * 100} barColor={colors.oil} />
-            <MetricBlock label="YTD Average" value={platform.ytdAvg.toLocaleString()} unit="bbl/d" pct={(platform.ytdAvg / plan) * 100} barColor={MINT} />
+            <MetricBlock label="YTD average" value={platform.ytdAvg.toLocaleString()} unit="bbl/d" pct={(platform.ytdAvg / plan) * 100} barColor={BLUE_MID} />
             <MetricBlock label="Target" value={Math.round(plan).toLocaleString()} unit="bbl/d" pct={100} barColor={colors.textMuted} />
           </div>
 
@@ -203,11 +201,11 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M12 2c1.5 3 4 5.5 4 9a4 4 0 0 1-8 0c0-3.5 2.5-6 4-9Z" fill={colors.gas} opacity={0.3} stroke={colors.gas} strokeWidth={1.5} />
               </svg>
-              <span className="text-[0.6875rem] font-bold" style={{ color: colors.gas }}>Gas Metrics</span>
+              <span className="text-[0.6875rem] font-bold" style={{ color: colors.gas }}>Gas metrics</span>
             </div>
             <div className="flex" style={{ gap: 16 }}>
               <MetricBlock label="Yesterday" value={Math.round(platform.ytdAvg * 0.68).toLocaleString()} unit="m³/d" pct={68} barColor={colors.gas} />
-              <MetricBlock label="YTD Average" value={Math.round(platform.ytdAvg * 0.7).toLocaleString()} unit="m³/d" pct={70} barColor={MINT} />
+              <MetricBlock label="YTD average" value={Math.round(platform.ytdAvg * 0.7).toLocaleString()} unit="m³/d" pct={70} barColor={BLUE_MID} />
               <MetricBlock label="Target" value={Math.round(platform.ytdAvg * 0.75).toLocaleString()} unit="m³/d" pct={100} barColor={colors.textMuted} />
             </div>
           </div>
@@ -264,8 +262,8 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
                   iconSize={8}
                   wrapperStyle={{ fontSize: 10, fontWeight: 600, color: colors.textMuted }}
                 />
-                <Bar dataKey="oil" name="Oil (bbl/d)" fill={colors.oil} radius={[0, 3, 3, 0]} animationDuration={600} opacity={0.85} />
-                <Bar dataKey="gas" name="Gas (m³/d)" fill={colors.gas} radius={[0, 3, 3, 0]} animationDuration={600} opacity={0.65} />
+                <Bar dataKey="oil" name="Oil (bbl/d)" fill={OIL_BAR} radius={[0, 3, 3, 0]} animationDuration={600} />
+                <Bar dataKey="gas" name="Gas (m³/d)" fill={GAS_BAR} radius={[0, 3, 3, 0]} animationDuration={600} />
               </BarChart>
             </ResponsiveContainer>
           </div>
