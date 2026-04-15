@@ -23,23 +23,21 @@ function fmtK(v: number) {
   return v >= 1000 ? `${Math.round(v / 1000)}k` : String(v);
 }
 
-function makeVarianceLabel(platforms: PlatformData[]) {
-  return function VarianceLabel(props: { x?: number; y?: number; width?: number; index?: number }) {
+function makeValueLabel(platforms: PlatformData[]) {
+  return function ValueLabel(props: { x?: number; y?: number; width?: number; index?: number }) {
     const { x = 0, y = 0, width = 0, index = 0 } = props;
     const p = platforms[index];
     if (!p) return null;
-    const pct = ((p.today - p.ytdAvg) / p.ytdAvg) * 100;
-    const positive = pct >= 0;
     return (
       <text
         x={x + width + 6}
         y={y + 6}
-        fill={positive ? '#34B78F' : colors.negative}
+        fill={colors.textSecondary}
         fontSize={9}
-        fontWeight={600}
+        fontWeight={700}
         fontFamily="var(--font-sans)"
       >
-        {positive ? '+' : ''}{pct.toFixed(1)}%
+        {fmtK(p.today)}
       </text>
     );
   };
@@ -67,7 +65,7 @@ function ClickableYTick(props: { x?: number; y?: number; payload?: { value: stri
 }
 
 export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick }: Props) {
-  const VarianceLabel = makeVarianceLabel(platforms);
+  const ValueLabel = makeValueLabel(platforms);
   const chartHeight = platforms.length * 28 + 24;
 
   const handleClick = (p: PlatformData) => {
@@ -101,7 +99,7 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
       <div style={{ padding: '2px 10px 4px' }}>
         <div className="mb-0.5 flex items-center justify-end" style={{ paddingRight: 6 }}>
           <span className="text-[0.5625rem] font-medium" style={{ color: colors.textMuted }}>
-            % vs yesterday
+            production today
           </span>
         </div>
         <ResponsiveContainer width="100%" height={chartHeight}>
@@ -134,8 +132,24 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
             <Tooltip
               contentStyle={tooltipStyle}
               labelStyle={{ color: colors.textMuted, fontSize: 10 }}
-              formatter={(v) => [Number(v).toLocaleString(), unit]}
               cursor={{ fill: 'rgba(90, 159, 212, 0.08)' }}
+              content={({ active, payload }) => {
+                if (!active || !payload?.[0]) return null;
+                const p = platforms.find(pl => pl.name === payload[0].payload?.name);
+                if (!p) return null;
+                const pct = ((p.today - p.ytdAvg) / p.ytdAvg * 100);
+                return (
+                  <div style={{ ...tooltipStyle, padding: '8px 12px' }}>
+                    <div style={{ color: colors.textMuted, fontSize: 10, marginBottom: 4 }}>{p.name}</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: colors.textPrimary }}>
+                      {p.today.toLocaleString()} {unit}
+                    </div>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: pct >= 0 ? '#34B78F' : colors.negative, marginTop: 2 }}>
+                      {pct >= 0 ? '+' : ''}{pct.toFixed(1)}% vs YTD
+                    </div>
+                  </div>
+                );
+              }}
             />
             <Bar
               dataKey="today"
@@ -143,7 +157,7 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
               fill={TODAY_COLOR}
               radius={[0, 4, 4, 0]}
               animationDuration={700}
-              label={<VarianceLabel />}
+              label={<ValueLabel />}
               style={{ cursor: 'pointer' }}
               onClick={(data) => {
                 const p = platforms.find(pl => pl.name === data.name);

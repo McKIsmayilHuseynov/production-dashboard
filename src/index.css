@@ -96,12 +96,11 @@ select {
 
 .card-hover {
   position: relative;
-  transition: transform 0.3s var(--ease-out-quart),
-              box-shadow 0.3s var(--ease-out-quart);
+  transition: border-color 0.2s ease;
+  border: 2px solid transparent !important;
 }
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-color: #5A9FD4 !important;
 }
 
 @keyframes slide-in-right {

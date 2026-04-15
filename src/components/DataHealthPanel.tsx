@@ -70,12 +70,15 @@ export function DataHealthPanel({ items }: Props) {
         </h3>
       </div>
 
-      <div className="flex-1 overflow-y-auto" style={{ padding: '6px 12px' }}>
+      <div
+        className="flex-1 flex flex-col justify-between"
+        style={{ padding: '4px 12px' }}
+      >
         {items.map((item) => (
           <div
             key={item.asset}
             className="flex items-center justify-between"
-            style={{ padding: '6px 0' }}
+            style={{ padding: '3px 0' }}
           >
             <span
               className="truncate text-[0.6875rem] font-bold"

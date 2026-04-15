@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import type { PlatformData } from '../data/nqciData';
 import { colors, chartAxis, tooltipStyle } from '../tokens';
 
@@ -8,36 +8,101 @@ interface Props {
   onClose: () => void;
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  active: '#34B78F',
-  idle: '#E0A835',
-  maintenance: '#E85858',
+const MINT = '#34B78F';
+
+const panelColors = {
+  bg: '#0E1E33',
+  cardBg: '#132B45',
+  cardBorder: '#1E4468',
+  divider: '#1E4468',
+  accent: '#6BB3E8',
 };
 
-function StatBlock({ label, value, sub }: { label: string; value: string; sub?: string }) {
+function PlatformIcon() {
   return (
-    <div className="flex flex-col" style={{ minWidth: 0 }}>
-      <span className="text-[0.5625rem] font-semibold tracking-[0.04em]" style={{ color: colors.textMuted }}>
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+      <rect x="4" y="22" width="24" height="4" rx="1" fill={panelColors.accent} opacity={0.3} stroke={panelColors.accent} strokeWidth={1} />
+      <rect x="8" y="14" width="4" height="8" rx="0.5" fill={panelColors.accent} opacity={0.5} />
+      <rect x="14" y="10" width="4" height="12" rx="0.5" fill={panelColors.accent} opacity={0.6} />
+      <rect x="20" y="16" width="4" height="6" rx="0.5" fill={panelColors.accent} opacity={0.4} />
+      <path d="M10 14V8l2-3 2 3v6" stroke={panelColors.accent} strokeWidth={1} strokeLinecap="round" strokeLinejoin="round" opacity={0.7} />
+      <circle cx="16" cy="6" r="2" fill={panelColors.accent} opacity={0.25} stroke={panelColors.accent} strokeWidth={0.8} />
+    </svg>
+  );
+}
+
+function WellIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+      <path d="M10 2v16" stroke={panelColors.accent} strokeWidth={1.5} strokeLinecap="round" />
+      <path d="M6 6h8M7 10h6" stroke={panelColors.accent} strokeWidth={1} strokeLinecap="round" opacity={0.6} />
+      <circle cx="10" cy="2" r="1.5" fill={panelColors.accent} opacity={0.4} />
+    </svg>
+  );
+}
+
+function KpiHero({ label, value, unit, delta, deltaLabel }: {
+  label: string; value: string; unit: string; delta: number; deltaLabel: string;
+}) {
+  return (
+    <div
+      className="card-hover flex flex-col"
+      style={{
+        padding: '12px 16px',
+        backgroundColor: panelColors.cardBg,
+        border: `2px solid transparent`,
+        borderRadius: 0,
+      }}
+    >
+      <span className="text-[0.5625rem] font-bold tracking-[0.06em] uppercase" style={{ color: colors.textMuted }}>
         {label}
       </span>
-      <span className="tabular-nums text-[1.125rem] font-bold leading-tight" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
-        {value}
+      <div className="flex items-baseline gap-2 mt-1">
+        <span className="tabular-nums text-[1.5rem] font-bold leading-none" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
+          {value}
+        </span>
+        <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted }}>{unit}</span>
+      </div>
+      <div style={{ marginTop: 4 }}>
+        <span className="tabular-nums text-[0.6875rem] font-semibold" style={{ color: delta >= 0 ? MINT : colors.negative }}>
+          {delta >= 0 ? '+' : ''}{delta.toFixed(1)}%
+        </span>
+        <span className="text-[0.625rem] font-medium" style={{ color: colors.textMuted, marginLeft: 4 }}>{deltaLabel}</span>
+      </div>
+    </div>
+  );
+}
+
+function MetricBlock({ label, value, unit, pct, barColor }: {
+  label: string; value: string; unit: string; pct: number; barColor: string;
+}) {
+  return (
+    <div className="flex-1">
+      <span className="text-[0.5rem] font-bold tracking-[0.06em] uppercase block" style={{ color: colors.textMuted }}>
+        {label}
       </span>
-      {sub && (
-        <span className="text-[0.5625rem] font-medium" style={{ color: colors.textMuted }}>{sub}</span>
-      )}
+      <div className="flex items-baseline gap-1 mt-0.5">
+        <span className="tabular-nums text-[0.9375rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
+          {value}
+        </span>
+        <span className="text-[0.5rem] font-medium" style={{ color: colors.textMuted }}>{unit}</span>
+      </div>
+      <div style={{ height: 3, borderRadius: 2, width: '100%', backgroundColor: 'rgba(90,159,212,0.1)', marginTop: 4 }}>
+        <div style={{ height: '100%', borderRadius: 2, width: `${Math.min(pct, 100)}%`, backgroundColor: barColor }} />
+      </div>
     </div>
   );
 }
 
 export function PlatformDetailPanel({ platform, type, onClose }: Props) {
   const wells = platform.wells || [];
-  const unit = type === 'oil' ? 'bbl/d' : 'm³/d';
-  const pctVsYtd = ((platform.today - platform.ytdAvg) / platform.ytdAvg * 100);
-  const capacityPct = platform.capacity;
-
   const totalOil = wells.reduce((s, w) => s + w.oil, 0);
   const totalGas = wells.reduce((s, w) => s + w.gas, 0);
+
+  const oilDelta = wells.length > 0 ? ((totalOil - platform.ytdAvg) / platform.ytdAvg * 100) : 0;
+  const gasDelta = wells.length > 0 ? ((totalGas - (platform.ytdAvg * 0.7)) / (platform.ytdAvg * 0.7) * 100) : 0;
+
+  const plan = platform.ytdAvg * 1.05;
 
   return (
     <div
@@ -45,44 +110,30 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
       style={{
         width: '50vw',
         maxWidth: 720,
-        backgroundColor: colors.pageBg,
-        borderLeft: `1px solid ${colors.cardBorder}`,
-        boxShadow: '-8px 0 32px rgba(0,0,0,0.4)',
+        backgroundColor: panelColors.bg,
+        borderLeft: `2px solid ${panelColors.cardBorder}`,
+        boxShadow: '-8px 0 32px rgba(0,0,0,0.5)',
         animation: 'slide-in-right 0.3s cubic-bezier(0.25,1,0.5,1) forwards',
       }}
     >
       {/* Header */}
       <div
         className="flex items-center justify-between shrink-0"
-        style={{ padding: '14px 20px', borderBottom: `1px solid ${colors.divider}` }}
+        style={{ padding: '12px 20px', borderBottom: `1px solid ${panelColors.divider}` }}
       >
         <div className="flex items-center gap-3">
           <div
             className="flex items-center justify-center"
-            style={{
-              width: 36, height: 36, borderRadius: 8,
-              backgroundColor: type === 'oil' ? 'rgba(90,159,212,0.15)' : 'rgba(123,184,227,0.15)',
-            }}
+            style={{ width: 40, height: 40, borderRadius: 8, backgroundColor: 'rgba(107,179,232,0.1)' }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 2C12 2 6 10 6 14a6 6 0 0 0 12 0c0-4-6-12-6-12Z"
-                fill={type === 'oil' ? '#5A9FD4' : '#7BB8E3'}
-                opacity={0.4}
-                stroke={type === 'oil' ? '#5A9FD4' : '#7BB8E3'}
-                strokeWidth={1.5}
-              />
-            </svg>
+            <PlatformIcon />
           </div>
           <div>
-            <h2
-              className="text-[1rem] font-bold"
-              style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
-            >
+            <h2 className="text-[1.0625rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
               {platform.name}
             </h2>
             <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted }}>
-              {type === 'oil' ? 'Oil' : 'Gas'} production detail
+              {type === 'oil' ? 'Oil' : 'Gas'} production deep dive
             </span>
           </div>
         </div>
@@ -91,12 +142,11 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
           className="flex items-center justify-center"
           style={{
             width: 32, height: 32, borderRadius: 6,
-            backgroundColor: 'rgba(90,159,212,0.1)',
+            backgroundColor: 'rgba(107,179,232,0.1)',
             border: 'none', cursor: 'pointer', color: colors.textSecondary,
-            transition: 'background 0.2s',
           }}
-          onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(90,159,212,0.2)')}
-          onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(90,159,212,0.1)')}
+          onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(107,179,232,0.2)')}
+          onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(107,179,232,0.1)')}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <path d="M18 6L6 18M6 6l12 12" />
@@ -105,110 +155,120 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto" style={{ padding: '16px 20px' }}>
-        {/* KPI row */}
-        <div
-          className="grid grid-cols-4"
-          style={{
-            gap: 12, padding: '12px 16px', marginBottom: 16,
-            backgroundColor: colors.cardBg, border: `1px solid ${colors.cardBorder}`,
-            borderRadius: 8,
-          }}
-        >
-          <StatBlock label="Today" value={platform.today.toLocaleString()} sub={unit} />
-          <StatBlock label="YTD Average" value={platform.ytdAvg.toLocaleString()} sub={unit} />
-          <StatBlock
-            label="vs YTD"
-            value={`${pctVsYtd >= 0 ? '+' : ''}${pctVsYtd.toFixed(1)}%`}
+      <div className="flex-1 overflow-y-auto" style={{ padding: '12px 20px 20px' }}>
+
+        {/* Section 1: Top hero KPIs — Total Oil + Total Gas */}
+        <div className="grid grid-cols-2" style={{ gap: 8, marginBottom: 10 }}>
+          <KpiHero
+            label="Total Oil Production"
+            value={totalOil.toLocaleString()}
+            unit="bbl/d"
+            delta={oilDelta}
+            deltaLabel="vs yesterday"
           />
-          <StatBlock label="Capacity" value={`${capacityPct}%`} />
+          <KpiHero
+            label="Total Gas Production"
+            value={totalGas.toLocaleString()}
+            unit="m³/d"
+            delta={gasDelta}
+            deltaLabel="vs yesterday"
+          />
         </div>
 
-        {/* Oil + Gas totals */}
-        <div className="grid grid-cols-2" style={{ gap: 12, marginBottom: 16 }}>
-          <div style={{ padding: '10px 14px', backgroundColor: colors.cardBg, border: `1px solid ${colors.cardBorder}`, borderRadius: 8 }}>
-            <span className="text-[0.5625rem] font-semibold tracking-[0.04em]" style={{ color: colors.textMuted }}>
-              Total Oil
-            </span>
-            <div className="flex items-baseline gap-1.5 mt-0.5">
-              <span className="tabular-nums text-[1.25rem] font-bold" style={{ color: colors.oil, fontFamily: 'var(--font-display)' }}>
-                {totalOil.toLocaleString()}
-              </span>
-              <span className="text-[0.625rem] font-medium" style={{ color: colors.textMuted }}>bbl/d</span>
-            </div>
-          </div>
-          <div style={{ padding: '10px 14px', backgroundColor: colors.cardBg, border: `1px solid ${colors.cardBorder}`, borderRadius: 8 }}>
-            <span className="text-[0.5625rem] font-semibold tracking-[0.04em]" style={{ color: colors.textMuted }}>
-              Total Gas
-            </span>
-            <div className="flex items-baseline gap-1.5 mt-0.5">
-              <span className="tabular-nums text-[1.25rem] font-bold" style={{ color: colors.gas, fontFamily: 'var(--font-display)' }}>
-                {totalGas.toLocaleString()}
-              </span>
-              <span className="text-[0.625rem] font-medium" style={{ color: colors.textMuted }}>m³/d</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Well status legend */}
-        <div className="flex items-center gap-4" style={{ marginBottom: 10 }}>
-          <h3 className="text-[0.75rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
-            Well-by-well production
-          </h3>
-          <div className="flex items-center gap-3" style={{ marginLeft: 'auto' }}>
-            {(['active', 'idle', 'maintenance'] as const).map(s => (
-              <div key={s} className="flex items-center gap-1.5">
-                <div style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: STATUS_COLORS[s] }} />
-                <span className="text-[0.5625rem] font-semibold capitalize" style={{ color: colors.textMuted }}>{s}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Well bar chart — dual bars (oil + gas) per well */}
+        {/* Section 2: Yesterday / YTD / Target — Oil row + Gas row */}
         <div
+          className="card-hover"
           style={{
-            padding: '8px 12px',
-            backgroundColor: colors.cardBg,
-            border: `1px solid ${colors.cardBorder}`,
-            borderRadius: 8,
+            backgroundColor: panelColors.cardBg,
+            border: `2px solid transparent`,
+            borderRadius: 0,
+            padding: '10px 16px',
+            marginBottom: 10,
           }}
         >
-          <ResponsiveContainer width="100%" height={wells.length * 36 + 30}>
-            <BarChart
-              layout="vertical"
-              data={wells}
-              margin={{ top: 4, right: 12, left: 4, bottom: 4 }}
-              barGap={2}
-              barSize={6}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke={colors.gridLine} horizontal={false} />
-              <XAxis type="number" tick={chartAxis} tickLine={false} axisLine={false} />
-              <YAxis
-                type="category"
-                dataKey="name"
-                tick={{ fill: colors.textSecondary, fontSize: 9, fontWeight: 600, fontFamily: 'var(--font-sans)' }}
-                tickLine={false}
-                axisLine={false}
-                width={56}
-              />
-              <Tooltip
-                contentStyle={tooltipStyle}
-                labelStyle={{ color: colors.textMuted, fontSize: 10 }}
-                cursor={{ fill: 'rgba(90, 159, 212, 0.08)' }}
-              />
-              <Bar dataKey="oil" name="Oil (bbl/d)" radius={[0, 3, 3, 0]} animationDuration={600}>
-                {wells.map((w, i) => (
-                  <Cell key={i} fill={STATUS_COLORS[w.status] === '#34B78F' ? colors.oil : STATUS_COLORS[w.status]} opacity={0.85} />
-                ))}
-              </Bar>
-              <Bar dataKey="gas" name="Gas (m³/d)" radius={[0, 3, 3, 0]} animationDuration={600}>
-                {wells.map((w, i) => (
-                  <Cell key={i} fill={STATUS_COLORS[w.status] === '#34B78F' ? colors.gas : STATUS_COLORS[w.status]} opacity={0.6} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          <div className="flex items-center gap-2" style={{ marginBottom: 8 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C12 2 6 10 6 14a6 6 0 0 0 12 0c0-4-6-12-6-12Z" fill={colors.oil} opacity={0.3} stroke={colors.oil} strokeWidth={1.5} />
+            </svg>
+            <span className="text-[0.6875rem] font-bold" style={{ color: colors.oil }}>Oil Metrics</span>
+          </div>
+          <div className="flex" style={{ gap: 16 }}>
+            <MetricBlock label="Yesterday" value={platform.ytdAvg.toLocaleString()} unit="bbl/d" pct={(platform.ytdAvg / plan) * 100} barColor={colors.oil} />
+            <MetricBlock label="YTD Average" value={platform.ytdAvg.toLocaleString()} unit="bbl/d" pct={(platform.ytdAvg / plan) * 100} barColor={MINT} />
+            <MetricBlock label="Target" value={Math.round(plan).toLocaleString()} unit="bbl/d" pct={100} barColor={colors.textMuted} />
+          </div>
+
+          <div style={{ borderTop: `1px solid ${panelColors.divider}`, marginTop: 10, paddingTop: 10 }}>
+            <div className="flex items-center gap-2" style={{ marginBottom: 8 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2c1.5 3 4 5.5 4 9a4 4 0 0 1-8 0c0-3.5 2.5-6 4-9Z" fill={colors.gas} opacity={0.3} stroke={colors.gas} strokeWidth={1.5} />
+              </svg>
+              <span className="text-[0.6875rem] font-bold" style={{ color: colors.gas }}>Gas Metrics</span>
+            </div>
+            <div className="flex" style={{ gap: 16 }}>
+              <MetricBlock label="Yesterday" value={Math.round(platform.ytdAvg * 0.68).toLocaleString()} unit="m³/d" pct={68} barColor={colors.gas} />
+              <MetricBlock label="YTD Average" value={Math.round(platform.ytdAvg * 0.7).toLocaleString()} unit="m³/d" pct={70} barColor={MINT} />
+              <MetricBlock label="Target" value={Math.round(platform.ytdAvg * 0.75).toLocaleString()} unit="m³/d" pct={100} barColor={colors.textMuted} />
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3: Well-by-well bar chart */}
+        <div
+          className="card-hover"
+          style={{
+            backgroundColor: panelColors.cardBg,
+            border: `2px solid transparent`,
+            borderRadius: 0,
+            marginBottom: 10,
+          }}
+        >
+          <div
+            className="flex items-center gap-2"
+            style={{ padding: '8px 16px', borderBottom: `1px solid ${panelColors.divider}` }}
+          >
+            <WellIcon />
+            <h3 className="text-[0.75rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
+              Well-by-well production
+            </h3>
+          </div>
+
+          <div style={{ padding: '8px 12px' }}>
+            <ResponsiveContainer width="100%" height={wells.length * 34 + 40}>
+              <BarChart
+                layout="vertical"
+                data={wells}
+                margin={{ top: 4, right: 12, left: 4, bottom: 4 }}
+                barGap={2}
+                barSize={7}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke={panelColors.divider} horizontal={false} />
+                <XAxis type="number" tick={chartAxis} tickLine={false} axisLine={false} />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  tick={{ fill: colors.textSecondary, fontSize: 9, fontWeight: 600, fontFamily: 'var(--font-sans)' }}
+                  tickLine={false}
+                  axisLine={false}
+                  width={56}
+                />
+                <Tooltip
+                  contentStyle={tooltipStyle}
+                  labelStyle={{ color: colors.textMuted, fontSize: 10 }}
+                  cursor={{ fill: 'rgba(107, 179, 232, 0.06)' }}
+                />
+                <Legend
+                  verticalAlign="top"
+                  height={28}
+                  iconType="square"
+                  iconSize={8}
+                  wrapperStyle={{ fontSize: 10, fontWeight: 600, color: colors.textMuted }}
+                />
+                <Bar dataKey="oil" name="Oil (bbl/d)" fill={colors.oil} radius={[0, 3, 3, 0]} animationDuration={600} opacity={0.85} />
+                <Bar dataKey="gas" name="Gas (m³/d)" fill={colors.gas} radius={[0, 3, 3, 0]} animationDuration={600} opacity={0.65} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>
