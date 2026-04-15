@@ -16,6 +16,7 @@ interface Props {
   title: string;
   platforms: PlatformData[];
   unit: string;
+  onPlatformClick?: (platform: PlatformData) => void;
 }
 
 function fmtK(v: number) {
@@ -44,8 +45,34 @@ function makeVarianceLabel(platforms: PlatformData[]) {
   };
 }
 
-export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
+function ClickableYTick(props: { x?: number; y?: number; payload?: { value: string }; platforms: PlatformData[]; onClick: (p: PlatformData) => void }) {
+  const { x = 0, y = 0, payload, platforms, onClick } = props;
+  const p = platforms.find(pl => pl.name === payload?.value);
+  return (
+    <text
+      x={x}
+      y={y}
+      dy={3}
+      textAnchor="end"
+      fill={colors.textSecondary}
+      fontSize={9}
+      fontWeight={600}
+      fontFamily="var(--font-sans)"
+      style={{ cursor: 'pointer' }}
+      onClick={() => p && onClick(p)}
+    >
+      {payload?.value}
+    </text>
+  );
+}
+
+export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick }: Props) {
   const VarianceLabel = makeVarianceLabel(platforms);
+  const chartHeight = platforms.length * 28 + 24;
+
+  const handleClick = (p: PlatformData) => {
+    if (onPlatformClick) onPlatformClick(p);
+  };
 
   return (
     <div
@@ -77,7 +104,7 @@ export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
             % vs yesterday
           </span>
         </div>
-        <ResponsiveContainer width="100%" height={190}>
+        <ResponsiveContainer width="100%" height={chartHeight}>
           <BarChart
             layout="vertical"
             data={platforms}
@@ -99,7 +126,7 @@ export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
             <YAxis
               type="category"
               dataKey="name"
-              tick={{ fill: colors.textSecondary, fontSize: 9, fontWeight: 600 }}
+              tick={<ClickableYTick platforms={platforms} onClick={handleClick} />}
               tickLine={false}
               axisLine={false}
               width={90}
@@ -108,6 +135,7 @@ export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
               contentStyle={tooltipStyle}
               labelStyle={{ color: colors.textMuted, fontSize: 10 }}
               formatter={(v) => [Number(v).toLocaleString(), unit]}
+              cursor={{ fill: 'rgba(90, 159, 212, 0.08)' }}
             />
             <Bar
               dataKey="today"
@@ -116,6 +144,11 @@ export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
               radius={[0, 4, 4, 0]}
               animationDuration={700}
               label={<VarianceLabel />}
+              style={{ cursor: 'pointer' }}
+              onClick={(data) => {
+                const p = platforms.find(pl => pl.name === data.name);
+                if (p) handleClick(p);
+              }}
             />
           </BarChart>
         </ResponsiveContainer>

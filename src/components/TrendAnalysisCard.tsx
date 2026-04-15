@@ -84,6 +84,7 @@ export function TrendAnalysisCard({ title, kpis, trend, accentColor, fillColor }
               contentStyle={tooltipStyle}
               labelStyle={{ color: colors.textMuted, fontSize: 10 }}
               formatter={(v) => [Number(v).toLocaleString(), kpis.unit]}
+              cursor={{ stroke: 'rgba(90, 159, 212, 0.2)', strokeWidth: 1 }}
             />
             <Area
               type="monotone"

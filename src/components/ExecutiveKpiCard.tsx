@@ -33,38 +33,38 @@ export function ExecutiveKpiCard({ label, kpis, accentColor, type }: Props) {
   void accentColor;
   return (
     <CardShell variant="elevated">
-      <div style={{ padding: '8px 12px' }}>
-        <div className="flex items-center gap-2" style={{ whiteSpace: 'nowrap' }}>
+      <div style={{ padding: '10px 14px' }}>
+        <div className="flex items-center gap-2" style={{ marginBottom: 4 }}>
           {type === 'oil' ? <OilIcon /> : <GasIcon />}
-
           <span
-            className="text-[0.875rem] font-semibold tracking-[0.03em]"
+            className="text-[0.8125rem] font-semibold tracking-[0.03em]"
             style={{ color: colors.textSecondary }}
           >
             {label}
           </span>
+        </div>
 
+        <div className="flex items-baseline gap-2" style={{ marginBottom: 2 }}>
           <span
-            className="tabular-nums text-[1.5rem] font-bold leading-none"
+            className="tabular-nums text-[1.75rem] font-bold leading-none"
             style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
           >
             {kpis.last24h.toLocaleString()}
           </span>
-
           <span
-            className="text-[0.6875rem] font-medium"
+            className="text-[0.75rem] font-medium"
             style={{ color: colors.textMuted }}
           >
             {kpis.unit}
           </span>
-
-          <span
-            className="tabular-nums text-[0.625rem] font-semibold"
-            style={{ color: kpis.delta24h >= 0 ? MINT : colors.negative }}
-          >
-            {kpis.delta24h >= 0 ? '+' : ''}{Math.abs(kpis.delta24h).toFixed(1)}% compared to yesterday
-          </span>
         </div>
+
+        <span
+          className="tabular-nums text-[0.6875rem] font-semibold"
+          style={{ color: kpis.delta24h >= 0 ? MINT : colors.negative }}
+        >
+          {kpis.delta24h >= 0 ? '+' : ''}{Math.abs(kpis.delta24h).toFixed(1)}% compared to yesterday
+        </span>
       </div>
     </CardShell>
   );

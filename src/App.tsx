@@ -4,9 +4,11 @@ import { HeaderBar } from './components/HeaderBar';
 import { ExecutiveKpiCard } from './components/ExecutiveKpiCard';
 import { TrendAnalysisCard } from './components/TrendAnalysisCard';
 import { PlatformBreakdownCard } from './components/PlatformBreakdownCard';
+import { PlatformDetailPanel } from './components/PlatformDetailPanel';
 import { SecondaryKpiCard } from './components/SecondaryKpiCard';
 import { DataHealthPanel } from './components/DataHealthPanel';
 import { nqciDashboardData as d } from './data/nqciData';
+import type { PlatformData } from './data/nqciData';
 import { colors } from './tokens';
 
 const OIL = colors.oil;
@@ -18,6 +20,7 @@ function reveal(ms: number): CSSProperties {
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<{ platform: PlatformData; type: 'oil' | 'gas' } | null>(null);
 
   if (!authenticated) {
     return <LoginPage onLogin={() => setAuthenticated(true)} />;
@@ -33,7 +36,7 @@ function App() {
 
       <div
         className="mx-auto flex"
-        style={{ maxWidth: 1680, paddingTop: 5, paddingLeft: 16, paddingRight: 16, paddingBottom: 2 }}
+        style={{ maxWidth: 1680, paddingTop: 5, paddingLeft: 16, paddingRight: 16, paddingBottom: 16 }}
       >
         {/* Main content area */}
         <div className="flex-1 min-w-0" style={{ paddingRight: 8 }}>
@@ -57,9 +60,25 @@ function App() {
             </div>
           </div>
 
-          {/* Layer 2: Production Analysis */}
+          {/* Layer 2: Secondary KPIs (Yesterday / YTD / Target) */}
           <div className="grid grid-cols-2" style={{ marginTop: 4, gap: 8 }}>
+            <div className="anim-reveal" style={reveal(100)}>
+              <SecondaryKpiCard
+                title="Oil production metrics"
+                kpis={d.oil.kpis}
+              />
+            </div>
             <div className="anim-reveal" style={reveal(120)}>
+              <SecondaryKpiCard
+                title="Gas production metrics"
+                kpis={d.gas.kpis}
+              />
+            </div>
+          </div>
+
+          {/* Layer 3: Production Analysis */}
+          <div className="grid grid-cols-2" style={{ marginTop: 4, gap: 8 }}>
+            <div className="anim-reveal" style={reveal(160)}>
               <TrendAnalysisCard
                 title="Oil production historical trend"
                 kpis={d.oil.kpis}
@@ -68,7 +87,7 @@ function App() {
                 fillColor="#5A9FD4"
               />
             </div>
-            <div className="anim-reveal" style={reveal(160)}>
+            <div className="anim-reveal" style={reveal(200)}>
               <TrendAnalysisCard
                 title="Gas production historical trend"
                 kpis={d.gas.kpis}
@@ -79,36 +98,22 @@ function App() {
             </div>
           </div>
 
-          {/* Layer 3: Platform Breakdown (Comparisons) */}
+          {/* Layer 4: Platform Breakdown (Comparisons) */}
           <div className="grid grid-cols-2" style={{ marginTop: 4, gap: 8 }}>
-            <div className="anim-reveal" style={reveal(200)}>
+            <div className="anim-reveal" style={reveal(240)}>
               <PlatformBreakdownCard
                 title="Comparison of oil production by platform"
                 platforms={d.oil.platforms}
                 unit={d.oil.kpis.unit}
+                onPlatformClick={(p) => setSelectedPlatform({ platform: p, type: 'oil' })}
               />
             </div>
-            <div className="anim-reveal" style={reveal(240)}>
+            <div className="anim-reveal" style={reveal(280)}>
               <PlatformBreakdownCard
                 title="Comparison of gas production by platform"
                 platforms={d.gas.platforms}
                 unit={d.gas.kpis.unit}
-              />
-            </div>
-          </div>
-
-          {/* Layer 4: Secondary KPIs (Yesterday / YTD / Target) */}
-          <div className="grid grid-cols-2" style={{ marginTop: 4, gap: 8 }}>
-            <div className="anim-reveal" style={reveal(280)}>
-              <SecondaryKpiCard
-                title="Oil production metrics"
-                kpis={d.oil.kpis}
-              />
-            </div>
-            <div className="anim-reveal" style={reveal(320)}>
-              <SecondaryKpiCard
-                title="Gas production metrics"
-                kpis={d.gas.kpis}
+                onPlatformClick={(p) => setSelectedPlatform({ platform: p, type: 'gas' })}
               />
             </div>
           </div>
@@ -122,6 +127,22 @@ function App() {
           <DataHealthPanel items={d.dataHealth} />
         </div>
       </div>
+
+      {/* Platform detail slide-in panel */}
+      {selectedPlatform && (
+        <>
+          <div
+            className="fixed inset-0 z-40"
+            style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+            onClick={() => setSelectedPlatform(null)}
+          />
+          <PlatformDetailPanel
+            platform={selectedPlatform.platform}
+            type={selectedPlatform.type}
+            onClose={() => setSelectedPlatform(null)}
+          />
+        </>
+      )}
     </div>
   );
 }

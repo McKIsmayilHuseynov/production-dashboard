@@ -99,26 +99,20 @@ select {
   transition: transform 0.3s var(--ease-out-quart),
               box-shadow 0.3s var(--ease-out-quart);
 }
-.card-hover::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: conic-gradient(from 0deg at 50% 50%, #5A9FD4 var(--border-progress), transparent var(--border-progress));
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: xor;
-  padding: 2px;
-  z-index: 10;
-  pointer-events: none;
-  --border-progress: 0%;
-  transition: --border-progress 5s var(--ease-out-quint);
-}
 .card-hover:hover {
-  transform: translateY(-10px);
+  transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
 }
-.card-hover:hover::after {
-  --border-progress: 100%;
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes pulse-alert {

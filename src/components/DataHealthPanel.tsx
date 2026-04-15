@@ -50,7 +50,7 @@ function HealthIcon() {
 export function DataHealthPanel({ items }: Props) {
   return (
     <div
-      className="flex flex-col h-full"
+      className="flex flex-col h-full card-hover"
       style={{
         backgroundColor: colors.cardBg,
         border: `1px solid ${colors.cardBorder}`,
