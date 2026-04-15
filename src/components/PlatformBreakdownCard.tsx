@@ -21,7 +21,11 @@ interface Props {
 }
 
 function fmtK(v: number) {
-  return v >= 1000 ? `${Math.round(v / 1000)}k` : String(v);
+  if (v >= 1000) {
+    const k = v / 1000;
+    return k % 1 === 0 ? `${k}k` : `${k.toFixed(1)}k`;
+  }
+  return String(v);
 }
 
 function ClickableYTick(props: { x?: number; y?: number; payload?: { value: string }; platforms: PlatformData[]; onClick: (p: PlatformData) => void }) {
