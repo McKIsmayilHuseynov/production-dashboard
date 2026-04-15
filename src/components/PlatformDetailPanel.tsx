@@ -57,20 +57,20 @@ function KpiHero({ label, value, unit, delta, deltaLabel }: {
         borderRadius: 0,
       }}
     >
-      <h3 className="text-[0.75rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
+      <h3 className="text-[0.875rem] font-bold tracking-[0.02em]" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
         {label}
       </h3>
       <div className="flex items-baseline gap-2 mt-1">
         <span className="tabular-nums text-[1.5rem] font-bold leading-none" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
           {value}
         </span>
-        <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted }}>{unit}</span>
+        <span className="text-[0.8125rem] font-medium" style={{ color: colors.textMuted }}>{unit}</span>
       </div>
       <div style={{ marginTop: 4 }}>
-        <span className="tabular-nums text-[0.6875rem] font-semibold" style={{ color: delta >= 0 ? '#34B78F' : colors.negative }}>
+        <span className="tabular-nums text-[0.8125rem] font-semibold" style={{ color: delta >= 0 ? '#34B78F' : colors.negative }}>
           {delta >= 0 ? '+' : ''}{delta.toFixed(1)}%
         </span>
-        <span className="text-[0.625rem] font-medium" style={{ color: colors.textMuted, marginLeft: 4 }}>{deltaLabel}</span>
+        <span className="text-[0.75rem] font-medium" style={{ color: colors.textMuted, marginLeft: 4 }}>{deltaLabel}</span>
       </div>
     </div>
   );
@@ -162,14 +162,14 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
             value={totalOil.toLocaleString()}
             unit="bbl/d"
             delta={oilDelta}
-            deltaLabel="vs yesterday"
+            deltaLabel="compared to yesterday"
           />
           <KpiHero
             label="Total gas production"
             value={totalGas.toLocaleString()}
             unit="m³/d"
             delta={gasDelta}
-            deltaLabel="vs yesterday"
+            deltaLabel="compared to yesterday"
           />
         </div>
 
@@ -184,7 +184,7 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
             marginBottom: 10,
           }}
         >
-          <h3 className="text-[0.75rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
+          <h3 className="text-[0.875rem] font-bold tracking-[0.02em]" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
             Oil metrics
           </h3>
           <div className="flex" style={{ gap: 16 }}>
@@ -194,7 +194,7 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
           </div>
 
           <div style={{ borderTop: `1px solid ${panelColors.divider}`, marginTop: 10, paddingTop: 10 }}>
-            <h3 className="text-[0.75rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
+            <h3 className="text-[0.875rem] font-bold tracking-[0.02em]" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
               Gas metrics
             </h3>
             <div className="flex" style={{ gap: 16 }}>
@@ -220,7 +220,7 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
             style={{ padding: '8px 16px', borderBottom: `1px solid ${panelColors.divider}` }}
           >
             <WellIcon />
-            <h3 className="text-[0.75rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
+            <h3 className="text-[0.875rem] font-bold tracking-[0.02em]" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
               Well-by-well production
             </h3>
           </div>
