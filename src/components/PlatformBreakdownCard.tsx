@@ -10,8 +10,7 @@ import {
 import type { PlatformData } from '../data/nqciData';
 import { colors, chartAxis, tooltipStyle } from '../tokens';
 
-const TODAY_COLOR = '#4A8DC8';
-const YTD_COLOR = 'rgba(74, 141, 200, 0.35)';
+const TODAY_COLOR = '#5A9FD4';
 
 interface Props {
   title: string;
@@ -53,13 +52,13 @@ export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
       className="flex flex-col card-hover"
       style={{
         backgroundColor: colors.cardBg,
-        border: '1px solid #D1D5DB',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.14)',
+        border: `1px solid ${colors.cardBorder}`,
+        boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
       }}
     >
       <div
         className="flex items-baseline gap-2"
-        style={{ padding: '6px 16px', borderBottom: `1px solid ${colors.divider}` }}
+        style={{ padding: '4px 14px', borderBottom: `1px solid ${colors.divider}` }}
       >
         <h3
           className="text-[0.75rem] font-bold tracking-[0.02em]"
@@ -73,17 +72,17 @@ export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
       </div>
 
       <div style={{ padding: '2px 10px 4px' }}>
-        <div className="mb-0.5 flex items-center justify-end gap-4" style={{ paddingRight: 6 }}>
-          <LegendDot color={TODAY_COLOR} label="Today" />
-          <LegendDot color={YTD_COLOR} label="YTD Average" />
+        <div className="mb-0.5 flex items-center justify-end" style={{ paddingRight: 6 }}>
+          <span className="text-[0.5625rem] font-medium" style={{ color: colors.textMuted }}>
+            % vs yesterday
+          </span>
         </div>
         <ResponsiveContainer width="100%" height={190}>
           <BarChart
             layout="vertical"
             data={platforms}
             margin={{ top: 2, right: 48, left: 2, bottom: 2 }}
-            barGap={1}
-            barSize={5}
+            barSize={8}
           >
             <CartesianGrid
               strokeDasharray="3 3"
@@ -100,7 +99,7 @@ export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
             <YAxis
               type="category"
               dataKey="name"
-              tick={{ fill: colors.textPrimary, fontSize: 9, fontWeight: 600 }}
+              tick={{ fill: colors.textSecondary, fontSize: 9, fontWeight: 600 }}
               tickLine={false}
               axisLine={false}
               width={90}
@@ -109,13 +108,6 @@ export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
               contentStyle={tooltipStyle}
               labelStyle={{ color: colors.textMuted, fontSize: 10 }}
               formatter={(v) => [Number(v).toLocaleString(), unit]}
-            />
-            <Bar
-              dataKey="ytdAvg"
-              name="YTD Average"
-              fill={YTD_COLOR}
-              radius={[0, 4, 4, 0]}
-              animationDuration={700}
             />
             <Bar
               dataKey="today"
@@ -128,20 +120,6 @@ export function PlatformBreakdownCard({ title, platforms, unit }: Props) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </div>
-  );
-}
-
-function LegendDot({ color, label }: { color: string; label: string }) {
-  return (
-    <div className="flex items-center gap-1.5">
-      <span
-        className="h-2 w-2 rounded-full"
-        style={{ backgroundColor: color }}
-      />
-      <span className="text-[0.625rem] font-medium" style={{ color: colors.textMuted }}>
-        {label}
-      </span>
     </div>
   );
 }

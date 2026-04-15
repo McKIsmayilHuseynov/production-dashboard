@@ -1,30 +1,30 @@
 export const colors = {
-  pageBg: '#F2F3F5',
-  cardBg: '#FFFFFF',
-  cardBorder: '#E8ECF0',
-  divider: '#F0F2F4',
-  dividerStrong: '#E2E6EB',
+  pageBg: '#0B1929',
+  cardBg: '#0F2137',
+  cardBorder: '#1A3550',
+  divider: '#1A3550',
+  dividerStrong: '#234060',
 
-  oil: '#4A8DC8',
-  oilLight: '#C6DCF0',
-  gas: '#6FAADB',
-  gasLight: '#C6DCF0',
+  oil: '#5A9FD4',
+  oilLight: '#2A5A80',
+  gas: '#7BB8E3',
+  gasLight: '#2A5A80',
 
-  textPrimary: '#1A1F2B',
-  textSecondary: '#4B5563',
-  textMuted: '#8896A6',
-  textIcon: '#6B7A8D',
+  textPrimary: '#C0DAF0',
+  textSecondary: '#7AACCE',
+  textMuted: '#4A7EA5',
+  textIcon: '#5A8FB5',
 
-  positive: '#2E9E5C',
-  positiveBg: 'rgba(46, 158, 92, 0.08)',
-  negative: '#D44B4B',
-  negativeBg: 'rgba(212, 75, 75, 0.06)',
-  warning: '#D4922B',
-  warningBg: 'rgba(212, 146, 43, 0.08)',
+  positive: '#34B78F',
+  positiveBg: 'rgba(52, 183, 143, 0.14)',
+  negative: '#E85858',
+  negativeBg: 'rgba(232, 88, 88, 0.12)',
+  warning: '#E0A835',
+  warningBg: 'rgba(224, 168, 53, 0.14)',
 
-  surfaceMuted: '#FAFBFC',
-  gridLine: '#EFF1F3',
-  refLine: '#A3C4E0',
+  surfaceMuted: '#0D1C30',
+  gridLine: '#1A3550',
+  refLine: '#3D6B94',
 };
 
 export const spacing = {
@@ -44,9 +44,9 @@ export const radius = {
 } as const;
 
 export const shadows = {
-  card: '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03)',
-  cardHover: '0 4px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)',
-  tooltip: '0 4px 14px rgba(0,0,0,0.08)',
+  card: '0 1px 4px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.15)',
+  cardHover: '0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)',
+  tooltip: '0 4px 14px rgba(0,0,0,0.4)',
 };
 
 export const fonts = {
@@ -55,15 +55,16 @@ export const fonts = {
 };
 
 export const chartAxis = {
-  fill: '#8896A6',
+  fill: '#5A8FB5',
   fontSize: 9,
   fontFamily: 'var(--font-sans)',
 };
 
 export const tooltipStyle: React.CSSProperties = {
-  backgroundColor: colors.cardBg,
+  backgroundColor: '#132B45',
   border: `1px solid ${colors.cardBorder}`,
   borderRadius: `${radius.md}px`,
   fontSize: '11px',
   boxShadow: shadows.tooltip,
+  color: colors.textPrimary,
 };

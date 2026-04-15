@@ -17,8 +17,8 @@ const base: CSSProperties = {
 const variants: Record<Variant, CSSProperties> = {
   elevated: {
     backgroundColor: colors.cardBg,
-    border: '1px solid #D1D5DB',
-    boxShadow: '0 4px 16px rgba(0,0,0,0.14)',
+    border: `1px solid ${colors.cardBorder}`,
+    boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
     borderRadius: 0,
   },
   default: {
@@ -27,7 +27,7 @@ const variants: Record<Variant, CSSProperties> = {
     boxShadow: shadows.card,
   },
   inset: {
-    backgroundColor: colors.cardBg,
+    backgroundColor: colors.surfaceMuted,
     border: `1px solid ${colors.dividerStrong}`,
     borderRadius: radius.lg,
   },

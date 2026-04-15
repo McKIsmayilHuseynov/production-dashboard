@@ -57,24 +57,19 @@ export interface NqciDashboardData {
   sideMetrics: SideMetric[];
 }
 
-const oilVals = [
-  20100, 20020, 19950, 19870, 19780, 19700, 19620, 19530, 19430, 19340,
-  19250, 19180, 19100, 19020, 18950, 18880, 18820, 18760, 18700, 18630,
-  18560, 18500, 18430, 18360, 18300, 18220, 18180, 18250, 18340, 18400,
+const months = [
+  'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
+  'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr',
 ];
 
-const gasVals = [
-  13900, 13840, 13780, 13720, 13650, 13580, 13520, 13460, 13400, 13330,
-  13260, 13190, 13120, 13060, 13000, 12950, 12900, 12850, 12800, 12760,
-  12720, 12680, 12650, 12620, 12590, 12560, 12550, 12620, 12700, 12800,
+const oilMonthly = [
+  20100, 19870, 19620, 19340, 19100, 18880,
+  18700, 18500, 18300, 18180, 18340, 18400,
 ];
 
-const dates = [
-  '16 Mar', '17 Mar', '18 Mar', '19 Mar', '20 Mar', '21 Mar', '22 Mar',
-  '23 Mar', '24 Mar', '25 Mar', '26 Mar', '27 Mar', '28 Mar', '29 Mar',
-  '30 Mar', '31 Mar', '1 Apr', '2 Apr', '3 Apr', '4 Apr', '5 Apr',
-  '6 Apr', '7 Apr', '8 Apr', '9 Apr', '10 Apr', '11 Apr', '12 Apr',
-  '13 Apr', '14 Apr',
+const gasMonthly = [
+  13900, 13720, 13520, 13330, 13120, 12950,
+  12800, 12680, 12590, 12550, 12700, 12800,
 ];
 
 export const nqciDashboardData: NqciDashboardData = {
@@ -89,14 +84,13 @@ export const nqciDashboardData: NqciDashboardData = {
       last24h: 18400, yesterday: 18250, ytdAvg: 18950, plan: 19600,
       unit: 'bbl/d', delta24h: 0.8, deltaYtd: -2.9,
     },
-    trend: oilVals.map((v, i) => ({ date: dates[i], value: v, ytdAvg: 18950 })),
+    trend: oilMonthly.map((v, i) => ({ date: months[i], value: v, ytdAvg: 18950 })),
     platforms: [
-      { name: 'Gunashli', today: 31500, ytdAvg: 30800, capacity: 87 },
-      { name: 'Neft Dashlari', today: 21300, ytdAvg: 20700, capacity: 79 },
-      { name: '28 May', today: 18400, ytdAvg: 18950, capacity: 82 },
-      { name: 'Chirag', today: 16200, ytdAvg: 15700, capacity: 91 },
-      { name: 'Pirallahi', today: 9100, ytdAvg: 8900, capacity: 76 },
-      { name: 'Bulla Deniz', today: 6700, ytdAvg: 6500, capacity: 74 },
+      { name: 'Platform 1', today: 31500, ytdAvg: 30800, capacity: 87 },
+      { name: 'Platform 2', today: 21300, ytdAvg: 20700, capacity: 79 },
+      { name: 'Platform 3', today: 18400, ytdAvg: 18950, capacity: 82 },
+      { name: 'Platform 4', today: 16200, ytdAvg: 15700, capacity: 91 },
+      { name: 'Platform 5', today: 9100, ytdAvg: 8900, capacity: 76 },
     ],
   },
   gas: {
@@ -104,20 +98,32 @@ export const nqciDashboardData: NqciDashboardData = {
       last24h: 12800, yesterday: 12700, ytdAvg: 13150, plan: 13600,
       unit: 'm³/d', delta24h: 0.8, deltaYtd: -2.7,
     },
-    trend: gasVals.map((v, i) => ({ date: dates[i], value: v, ytdAvg: 13150 })),
+    trend: gasMonthly.map((v, i) => ({ date: months[i], value: v, ytdAvg: 13150 })),
     platforms: [
-      { name: 'Shah Deniz', today: 36500, ytdAvg: 35200, capacity: 93 },
-      { name: 'Gunashli', today: 18400, ytdAvg: 17900, capacity: 84 },
-      { name: '28 May', today: 12800, ytdAvg: 13150, capacity: 78 },
-      { name: 'Chirag', today: 11200, ytdAvg: 10700, capacity: 72 },
-      { name: 'Bulla Deniz', today: 8100, ytdAvg: 7900, capacity: 68 },
-      { name: 'Neft Dashlari', today: 5900, ytdAvg: 5700, capacity: 65 },
+      { name: 'Platform 1', today: 36500, ytdAvg: 35200, capacity: 93 },
+      { name: 'Platform 2', today: 18400, ytdAvg: 17900, capacity: 84 },
+      { name: 'Platform 3', today: 12800, ytdAvg: 13150, capacity: 78 },
+      { name: 'Platform 4', today: 11200, ytdAvg: 10700, capacity: 72 },
+      { name: 'Platform 5', today: 8100, ytdAvg: 7900, capacity: 68 },
     ],
   },
   dataHealth: [
-    { asset: '28 May tank-site', status: 'missing', lastUpdate: 'Since 05:10', severity: 'critical' },
-    { asset: '14 platforms', status: 'healthy', lastUpdate: '06:40 AM', severity: 'ok' },
-    { asset: 'Dubendi tank site', status: 'delayed', lastUpdate: '06:15 AM', severity: 'warning' },
+    { asset: 'Dubendi terminal', status: 'delayed', lastUpdate: '06:15 AM', severity: 'warning' },
+    { asset: '28 May tanks', status: 'missing', lastUpdate: 'Since 05:10', severity: 'critical' },
+    { asset: 'Platform 1', status: 'healthy', lastUpdate: '06:40 AM', severity: 'ok' },
+    { asset: 'Platform 2', status: 'healthy', lastUpdate: '06:41 AM', severity: 'ok' },
+    { asset: 'Platform 3', status: 'healthy', lastUpdate: '06:39 AM', severity: 'ok' },
+    { asset: 'Platform 4', status: 'healthy', lastUpdate: '06:42 AM', severity: 'ok' },
+    { asset: 'Platform 5', status: 'healthy', lastUpdate: '06:40 AM', severity: 'ok' },
+    { asset: 'Platform 6', status: 'delayed', lastUpdate: '05:58 AM', severity: 'warning' },
+    { asset: 'Platform 7', status: 'healthy', lastUpdate: '06:41 AM', severity: 'ok' },
+    { asset: 'Platform 8', status: 'healthy', lastUpdate: '06:42 AM', severity: 'ok' },
+    { asset: 'Platform 9', status: 'stale', lastUpdate: '04:30 AM', severity: 'warning' },
+    { asset: 'Platform 10', status: 'healthy', lastUpdate: '06:38 AM', severity: 'ok' },
+    { asset: 'Platform 11', status: 'healthy', lastUpdate: '06:40 AM', severity: 'ok' },
+    { asset: 'Platform 12', status: 'missing', lastUpdate: 'Since 03:20', severity: 'critical' },
+    { asset: 'Platform 13', status: 'healthy', lastUpdate: '06:41 AM', severity: 'ok' },
+    { asset: 'Platform 14', status: 'healthy', lastUpdate: '06:39 AM', severity: 'ok' },
   ],
   sideMetrics: [
     { label: 'Total liquid rate', value: '142.8K', unit: 'bbl/d', prev: '141.5K' },

@@ -20,7 +20,7 @@ const config: Record<Status, { label: string; bg: string; text: string }> = {
   },
   stale: {
     label: 'Stale',
-    bg: 'rgba(136, 150, 166, 0.08)',
+    bg: 'rgba(74, 126, 165, 0.12)',
     text: colors.textMuted,
   },
 };

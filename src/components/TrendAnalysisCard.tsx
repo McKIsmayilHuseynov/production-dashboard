@@ -31,13 +31,13 @@ export function TrendAnalysisCard({ title, kpis, trend, accentColor, fillColor }
       className="flex flex-col card-hover"
       style={{
         backgroundColor: colors.cardBg,
-        border: '1px solid #D1D5DB',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.14)',
+        border: `1px solid ${colors.cardBorder}`,
+        boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
       }}
     >
       <div
         className="flex items-baseline gap-2" 
-        style={{ padding: '6px 16px', borderBottom: `1px solid ${colors.divider}` }}
+        style={{ padding: '4px 14px', borderBottom: `1px solid ${colors.divider}` }}
       >
         <h3
           className="text-[0.75rem] font-bold tracking-[0.02em]"
@@ -56,8 +56,8 @@ export function TrendAnalysisCard({ title, kpis, trend, accentColor, fillColor }
             <defs>
               <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={fill} stopOpacity={0.45} />
-                <stop offset="50%" stopColor={fill} stopOpacity={0.25} />
-                <stop offset="100%" stopColor={fill} stopOpacity={0.06} />
+                <stop offset="50%" stopColor={fill} stopOpacity={0.2} />
+                <stop offset="100%" stopColor={fill} stopOpacity={0.03} />
               </linearGradient>
             </defs>
             <CartesianGrid
@@ -70,7 +70,7 @@ export function TrendAnalysisCard({ title, kpis, trend, accentColor, fillColor }
               tick={chartAxis}
               tickLine={false}
               axisLine={false}
-              interval={4}
+              interval={0}
             />
             <YAxis
               tick={chartAxis}

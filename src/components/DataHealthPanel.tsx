@@ -1,77 +1,92 @@
 import type { DataHealthItem } from '../data/nqciData';
 import { colors } from '../tokens';
-import { StatusBadge } from './StatusBadge';
 
 interface Props {
   items: DataHealthItem[];
 }
 
-function HealthIcon() {
+const flagColors: Record<DataHealthItem['status'], string> = {
+  healthy: '#34B78F',
+  delayed: '#E0A835',
+  missing: '#E85858',
+  stale: '#E85858',
+};
+
+const flagLabels: Record<DataHealthItem['status'], string> = {
+  healthy: 'Live connection',
+  delayed: 'Delays',
+  missing: 'Unavailable',
+  stale: 'Unavailable',
+};
+
+function StatusFlag({ status }: { status: DataHealthItem['status'] }) {
+  const c = flagColors[status];
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <rect x="3" y="3" width="18" height="18" rx="3" fill="#4A8DC8" opacity={0.12} stroke="#4A8DC8" strokeWidth={1.3} />
-      <path d="M12 7v10M7 12h10" stroke="#4A8DC8" strokeWidth={1.5} strokeLinecap="round" />
-    </svg>
+    <span
+      className="inline-flex items-center justify-center text-[0.5625rem] font-bold"
+      style={{
+        padding: '3px 8px',
+        borderRadius: 4,
+        backgroundColor: `${c}18`,
+        color: c,
+        flexShrink: 0,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {flagLabels[status]}
+    </span>
   );
 }
 
-function timeLabel(item: DataHealthItem) {
-  if (item.status === 'healthy') return 'Connection is live';
-  return `Last updated ${item.lastUpdate}`;
-}
-
-function SiteCard({ item }: { item: DataHealthItem }) {
+function HealthIcon() {
   return (
-    <div className="flex flex-1 items-center gap-3" style={{ minWidth: 0 }}>
-      <span
-        className="truncate text-[0.6875rem] font-semibold"
-        style={{ color: colors.textPrimary }}
-      >
-        {item.asset}
-      </span>
-      <StatusBadge status={item.status} />
-      <span
-        className="text-[0.625rem] font-medium"
-        style={{ color: colors.textMuted }}
-      >
-        {timeLabel(item)}
-      </span>
-    </div>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="3" width="18" height="18" rx="3" fill="#5A9FD4" opacity={0.15} stroke="#5A9FD4" strokeWidth={1.3} />
+      <path d="M12 7v10M7 12h10" stroke="#5A9FD4" strokeWidth={1.5} strokeLinecap="round" />
+    </svg>
   );
 }
 
 export function DataHealthPanel({ items }: Props) {
   return (
     <div
-      className="flex items-center gap-5 card-hover"
+      className="flex flex-col h-full"
       style={{
         backgroundColor: colors.cardBg,
-        border: '1px solid #D1D5DB',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.14)',
-        padding: '8px 16px',
-        marginBottom: 6,
+        border: `1px solid ${colors.cardBorder}`,
+        boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
       }}
     >
-      <div className="flex shrink-0 items-center gap-2.5">
+      <div
+        className="flex items-center gap-2 shrink-0"
+        style={{ padding: '8px 12px', borderBottom: `1px solid ${colors.divider}` }}
+      >
         <HealthIcon />
         <h3
           className="text-[0.75rem] font-bold tracking-[0.02em]"
           style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
         >
-          Data health
+          Data Health
         </h3>
       </div>
 
-      <div className="h-6" style={{ borderLeft: `1px solid ${colors.divider}` }} />
-
-      {items.map((item, i) => (
-        <div key={item.asset} className="flex flex-1 items-center gap-3" style={{ minWidth: 0 }}>
-          {i > 0 && (
-            <div className="h-6 shrink-0" style={{ borderLeft: `1px solid ${colors.divider}` }} />
-          )}
-          <SiteCard item={item} />
-        </div>
-      ))}
+      <div className="flex-1 overflow-y-auto" style={{ padding: '6px 12px' }}>
+        {items.map((item) => (
+          <div
+            key={item.asset}
+            className="flex items-center justify-between"
+            style={{ padding: '6px 0' }}
+          >
+            <span
+              className="truncate text-[0.6875rem] font-bold"
+              style={{ color: colors.textPrimary, flex: 1, minWidth: 0, marginRight: 8 }}
+            >
+              {item.asset}
+            </span>
+            <StatusFlag status={item.status} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

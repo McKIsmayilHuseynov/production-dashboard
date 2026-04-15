@@ -4,6 +4,7 @@ import { HeaderBar } from './components/HeaderBar';
 import { ExecutiveKpiCard } from './components/ExecutiveKpiCard';
 import { TrendAnalysisCard } from './components/TrendAnalysisCard';
 import { PlatformBreakdownCard } from './components/PlatformBreakdownCard';
+import { SecondaryKpiCard } from './components/SecondaryKpiCard';
 import { DataHealthPanel } from './components/DataHealthPanel';
 import { nqciDashboardData as d } from './data/nqciData';
 import { colors } from './tokens';
@@ -30,69 +31,94 @@ function App() {
         lastRefresh={d.meta.lastRefresh}
       />
 
-      <div className="mx-auto max-w-[1680px]" style={{ paddingTop: 7, paddingLeft: 16, paddingRight: 16, paddingBottom: 2 }}>
-        {/* Layer 1: Executive Summary */}
-        <div className="grid grid-cols-2" style={{ gap: 8 }}>
-          <div className="anim-reveal" style={reveal(40)}>
-            <ExecutiveKpiCard
-              label="Oil Production 24H"
-              kpis={d.oil.kpis}
-              accentColor={OIL}
-              type="oil"
-            />
+      <div
+        className="mx-auto flex"
+        style={{ maxWidth: 1680, paddingTop: 5, paddingLeft: 16, paddingRight: 16, paddingBottom: 2 }}
+      >
+        {/* Main content area */}
+        <div className="flex-1 min-w-0" style={{ paddingRight: 8 }}>
+          {/* Layer 1: Executive Summary (main values only) */}
+          <div className="grid grid-cols-2" style={{ gap: 8 }}>
+            <div className="anim-reveal" style={reveal(40)}>
+              <ExecutiveKpiCard
+                label="Oil production today"
+                kpis={d.oil.kpis}
+                accentColor={OIL}
+                type="oil"
+              />
+            </div>
+            <div className="anim-reveal" style={reveal(80)}>
+              <ExecutiveKpiCard
+                label="Gas production today"
+                kpis={d.gas.kpis}
+                accentColor={GAS}
+                type="gas"
+              />
+            </div>
           </div>
-          <div className="anim-reveal" style={reveal(80)}>
-            <ExecutiveKpiCard
-              label="Gas Production 24H"
-              kpis={d.gas.kpis}
-              accentColor={GAS}
-              type="gas"
-            />
+
+          {/* Layer 2: Production Analysis */}
+          <div className="grid grid-cols-2" style={{ marginTop: 4, gap: 8 }}>
+            <div className="anim-reveal" style={reveal(120)}>
+              <TrendAnalysisCard
+                title="Oil production historical trend"
+                kpis={d.oil.kpis}
+                trend={d.oil.trend}
+                accentColor={OIL}
+                fillColor="#5A9FD4"
+              />
+            </div>
+            <div className="anim-reveal" style={reveal(160)}>
+              <TrendAnalysisCard
+                title="Gas production historical trend"
+                kpis={d.gas.kpis}
+                trend={d.gas.trend}
+                accentColor={GAS}
+                fillColor="#7BB8E3"
+              />
+            </div>
+          </div>
+
+          {/* Layer 3: Platform Breakdown (Comparisons) */}
+          <div className="grid grid-cols-2" style={{ marginTop: 4, gap: 8 }}>
+            <div className="anim-reveal" style={reveal(200)}>
+              <PlatformBreakdownCard
+                title="Comparison of oil production by platform"
+                platforms={d.oil.platforms}
+                unit={d.oil.kpis.unit}
+              />
+            </div>
+            <div className="anim-reveal" style={reveal(240)}>
+              <PlatformBreakdownCard
+                title="Comparison of gas production by platform"
+                platforms={d.gas.platforms}
+                unit={d.gas.kpis.unit}
+              />
+            </div>
+          </div>
+
+          {/* Layer 4: Secondary KPIs (Yesterday / YTD / Target) */}
+          <div className="grid grid-cols-2" style={{ marginTop: 4, gap: 8 }}>
+            <div className="anim-reveal" style={reveal(280)}>
+              <SecondaryKpiCard
+                title="Oil production metrics"
+                kpis={d.oil.kpis}
+              />
+            </div>
+            <div className="anim-reveal" style={reveal(320)}>
+              <SecondaryKpiCard
+                title="Gas production metrics"
+                kpis={d.gas.kpis}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Layer 2: Production Analysis */}
-        <div className="grid grid-cols-2" style={{ marginTop: 6, gap: 8 }}>
-          <div className="anim-reveal" style={reveal(120)}>
-            <TrendAnalysisCard
-              title="Oil production historical trend"
-              kpis={d.oil.kpis}
-              trend={d.oil.trend}
-              accentColor={OIL}
-              fillColor="#4A8DC8"
-            />
-          </div>
-          <div className="anim-reveal" style={reveal(160)}>
-            <TrendAnalysisCard
-              title="Gas production historical trend"
-              kpis={d.gas.kpis}
-              trend={d.gas.trend}
-              accentColor={GAS}
-              fillColor="#6FAADB"
-            />
-          </div>
-        </div>
-
-        {/* Layer 3a: Platform Breakdown */}
-        <div className="grid grid-cols-2" style={{ marginTop: 6, gap: 8 }}>
-          <div className="anim-reveal" style={reveal(200)}>
-            <PlatformBreakdownCard
-              title="Comparison of oil production by platform"
-              platforms={d.oil.platforms}
-              unit={d.oil.kpis.unit}
-            />
-          </div>
-          <div className="anim-reveal" style={reveal(240)}>
-            <PlatformBreakdownCard
-              title="Comparison of gas production by platform"
-              platforms={d.gas.platforms}
-              unit={d.gas.kpis.unit}
-            />
-          </div>
-        </div>
-
-        {/* Layer 3b: Data Health */}
-        <div className="anim-reveal" style={{ marginTop: 4, ...reveal(280) }}>
+        {/* Right sidebar: Data Health */}
+        <div
+          className="anim-reveal shrink-0"
+          style={{ width: 220, ...reveal(100) }}
+        >
           <DataHealthPanel items={d.dataHealth} />
         </div>
       </div>
