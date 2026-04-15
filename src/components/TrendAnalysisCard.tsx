@@ -2,7 +2,6 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
-  LabelList,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -19,8 +18,8 @@ interface Props {
   fillColor?: string;
 }
 
-function fmtK(v: number) {
-  return v >= 1000 ? `${Math.round(v / 1000)}k` : String(v);
+function fmtVol(v: number) {
+  return v.toLocaleString();
 }
 
 export function TrendAnalysisCard({ title, kpis, trend, accentColor, fillColor }: Props) {
@@ -77,8 +76,8 @@ export function TrendAnalysisCard({ title, kpis, trend, accentColor, fillColor }
               tick={chartAxis}
               tickLine={false}
               axisLine={false}
-              tickFormatter={fmtK}
-              width={42}
+              tickFormatter={fmtVol}
+              width={52}
               domain={['dataMin - 1000', 'dataMax + 500']}
             />
             <Tooltip
@@ -95,15 +94,7 @@ export function TrendAnalysisCard({ title, kpis, trend, accentColor, fillColor }
               strokeLinejoin="round"
               fill={`url(#${gradientId})`}
               animationDuration={800}
-            >
-              <LabelList
-                dataKey="value"
-                position="top"
-                formatter={fmtK}
-                style={{ fill: colors.textSecondary, fontSize: 9, fontWeight: 600, fontFamily: 'var(--font-sans)' }}
-                offset={6}
-              />
-            </Area>
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>
