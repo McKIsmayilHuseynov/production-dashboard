@@ -15,7 +15,7 @@ function MetricBlock({ label, value, unit, pct, barColor }: {
     <div className="flex-1" style={{ padding: '8px 0' }}>
       <div className="flex items-center justify-between" style={{ marginBottom: 2 }}>
         <span
-          className="text-[0.5625rem] font-bold tracking-[0.04em]"
+          className="text-[0.6875rem] font-bold tracking-[0.04em]"
           style={{ color: colors.textMuted }}
         >
           {label}
@@ -23,12 +23,12 @@ function MetricBlock({ label, value, unit, pct, barColor }: {
       </div>
       <div className="flex items-baseline gap-1.5" style={{ marginBottom: 6 }}>
         <span
-          className="tabular-nums text-[1.125rem] font-bold"
+          className="tabular-nums text-[1.25rem] font-bold"
           style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
         >
           {value}
         </span>
-        <span className="text-[0.5625rem] font-medium" style={{ color: colors.textMuted }}>
+        <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted }}>
           {unit}
         </span>
       </div>
@@ -67,7 +67,7 @@ export function SecondaryKpiCard({ title, kpis }: Props) {
         style={{ padding: '6px 14px', borderBottom: `1px solid ${colors.divider}` }}
       >
         <h3
-          className="text-[0.75rem] font-bold tracking-[0.02em]"
+          className="text-[0.875rem] font-bold tracking-[0.02em]"
           style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
         >
           {title}

@@ -56,7 +56,7 @@ export const fonts = {
 
 export const chartAxis = {
   fill: '#5A8FB5',
-  fontSize: 9,
+  fontSize: 11,
   fontFamily: 'var(--font-sans)',
 };
 

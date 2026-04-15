@@ -23,26 +23,6 @@ function fmtK(v: number) {
   return v >= 1000 ? `${Math.round(v / 1000)}k` : String(v);
 }
 
-function makeValueLabel(platforms: PlatformData[]) {
-  return function ValueLabel(props: { x?: number; y?: number; width?: number; index?: number }) {
-    const { x = 0, y = 0, width = 0, index = 0 } = props;
-    const p = platforms[index];
-    if (!p) return null;
-    return (
-      <text
-        x={x + width + 6}
-        y={y + 6}
-        fill={colors.textSecondary}
-        fontSize={9}
-        fontWeight={700}
-        fontFamily="var(--font-sans)"
-      >
-        {fmtK(p.today)}
-      </text>
-    );
-  };
-}
-
 function ClickableYTick(props: { x?: number; y?: number; payload?: { value: string }; platforms: PlatformData[]; onClick: (p: PlatformData) => void }) {
   const { x = 0, y = 0, payload, platforms, onClick } = props;
   const p = platforms.find(pl => pl.name === payload?.value);
@@ -53,7 +33,7 @@ function ClickableYTick(props: { x?: number; y?: number; payload?: { value: stri
       dy={3}
       textAnchor="end"
       fill={colors.textSecondary}
-      fontSize={9}
+      fontSize={11}
       fontWeight={600}
       fontFamily="var(--font-sans)"
       style={{ cursor: 'pointer' }}
@@ -65,7 +45,6 @@ function ClickableYTick(props: { x?: number; y?: number; payload?: { value: stri
 }
 
 export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick }: Props) {
-  const ValueLabel = makeValueLabel(platforms);
   const chartHeight = platforms.length * 28 + 24;
 
   const handleClick = (p: PlatformData) => {
@@ -83,30 +62,25 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
     >
       <div
         className="flex items-baseline gap-2"
-        style={{ padding: '4px 14px', borderBottom: `1px solid ${colors.divider}` }}
+        style={{ padding: '6px 14px', borderBottom: `1px solid ${colors.divider}` }}
       >
         <h3
-          className="text-[0.75rem] font-bold tracking-[0.02em]"
+          className="text-[0.875rem] font-bold tracking-[0.02em]"
           style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
         >
           {title}
         </h3>
-        <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted }}>
+        <span className="text-[0.8125rem] font-medium" style={{ color: colors.textMuted }}>
           {unit}
         </span>
       </div>
 
-      <div style={{ padding: '2px 10px 4px' }}>
-        <div className="mb-0.5 flex items-center justify-end" style={{ paddingRight: 6 }}>
-          <span className="text-[0.5625rem] font-medium" style={{ color: colors.textMuted }}>
-            production today
-          </span>
-        </div>
+      <div style={{ padding: '4px 10px 6px' }}>
         <ResponsiveContainer width="100%" height={chartHeight}>
           <BarChart
             layout="vertical"
             data={platforms}
-            margin={{ top: 2, right: 48, left: 2, bottom: 2 }}
+            margin={{ top: 2, right: 12, left: 2, bottom: 2 }}
             barSize={8}
           >
             <CartesianGrid
@@ -131,7 +105,7 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
             />
             <Tooltip
               contentStyle={tooltipStyle}
-              labelStyle={{ color: colors.textMuted, fontSize: 10 }}
+              labelStyle={{ color: colors.textMuted, fontSize: 11 }}
               cursor={{ fill: 'rgba(90, 159, 212, 0.08)' }}
               content={({ active, payload }) => {
                 if (!active || !payload?.[0]) return null;
@@ -140,12 +114,12 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
                 const pct = ((p.today - p.ytdAvg) / p.ytdAvg * 100);
                 return (
                   <div style={{ ...tooltipStyle, padding: '8px 12px' }}>
-                    <div style={{ color: colors.textMuted, fontSize: 10, marginBottom: 4 }}>{p.name}</div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: colors.textPrimary }}>
+                    <div style={{ color: colors.textMuted, fontSize: 11, marginBottom: 4 }}>{p.name}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: colors.textPrimary }}>
                       {p.today.toLocaleString()} {unit}
                     </div>
-                    <div style={{ fontSize: 11, fontWeight: 600, color: pct >= 0 ? '#34B78F' : colors.negative, marginTop: 2 }}>
-                      {pct >= 0 ? '+' : ''}{pct.toFixed(1)}% vs YTD avg
+                    <div style={{ fontSize: 12, fontWeight: 600, color: pct >= 0 ? '#34B78F' : colors.negative, marginTop: 3 }}>
+                      {pct >= 0 ? '+' : ''}{pct.toFixed(1)}% compared to yesterday
                     </div>
                   </div>
                 );
@@ -157,7 +131,6 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
               fill={TODAY_COLOR}
               radius={[0, 4, 4, 0]}
               animationDuration={700}
-              label={<ValueLabel />}
               style={{ cursor: 'pointer' }}
               onClick={(data) => {
                 const p = platforms.find(pl => pl.name === data.name);

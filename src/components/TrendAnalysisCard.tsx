@@ -40,12 +40,12 @@ export function TrendAnalysisCard({ title, kpis, trend, accentColor, fillColor }
         style={{ padding: '4px 14px', borderBottom: `1px solid ${colors.divider}` }}
       >
         <h3
-          className="text-[0.75rem] font-bold tracking-[0.02em]"
+          className="text-[0.875rem] font-bold tracking-[0.02em]"
           style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
         >
           {title}
         </h3>
-        <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted }}>
+        <span className="text-[0.8125rem] font-medium" style={{ color: colors.textMuted }}>
           {kpis.unit}
         </span>
       </div>

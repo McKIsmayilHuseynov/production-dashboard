@@ -37,7 +37,7 @@ export function ExecutiveKpiCard({ label, kpis, accentColor, type }: Props) {
         <div className="flex items-center gap-2">
           {type === 'oil' ? <OilIcon /> : <GasIcon />}
           <span
-            className="text-[0.9375rem] font-bold tracking-[0.02em]"
+            className="text-[1.0625rem] font-bold tracking-[0.02em]"
             style={{ color: colors.textSecondary, fontFamily: 'var(--font-display)' }}
           >
             {label}
@@ -53,7 +53,7 @@ export function ExecutiveKpiCard({ label, kpis, accentColor, type }: Props) {
               {kpis.last24h.toLocaleString()}
             </span>
             <span
-              className="text-[0.75rem] font-medium"
+              className="text-[0.875rem] font-medium"
               style={{ color: colors.textMuted }}
             >
               {kpis.unit}
@@ -61,12 +61,12 @@ export function ExecutiveKpiCard({ label, kpis, accentColor, type }: Props) {
           </div>
           <div style={{ marginTop: 4 }}>
             <span
-              className="tabular-nums text-[0.75rem] font-semibold"
+              className="tabular-nums text-[0.8125rem] font-semibold"
               style={{ color: kpis.delta24h >= 0 ? MINT : colors.negative }}
             >
               {kpis.delta24h >= 0 ? '+' : ''}{Math.abs(kpis.delta24h).toFixed(1)}%
             </span>
-            <span className="text-[0.6875rem] font-medium" style={{ color: colors.textMuted, marginLeft: 4 }}>
+            <span className="text-[0.75rem] font-medium" style={{ color: colors.textMuted, marginLeft: 4 }}>
               vs yesterday
             </span>
           </div>

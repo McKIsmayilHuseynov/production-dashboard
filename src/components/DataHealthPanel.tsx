@@ -23,7 +23,7 @@ function StatusFlag({ status }: { status: DataHealthItem['status'] }) {
   const c = flagColors[status];
   return (
     <span
-      className="inline-flex items-center justify-center text-[0.5625rem] font-bold"
+      className="inline-flex items-center justify-center text-[0.625rem] font-bold"
       style={{
         padding: '3px 8px',
         borderRadius: 4,
@@ -64,7 +64,7 @@ export function DataHealthPanel({ items }: Props) {
         <div className="flex items-center gap-2">
           <HealthIcon />
           <h3
-            className="text-[0.75rem] font-bold tracking-[0.02em]"
+            className="text-[0.875rem] font-bold tracking-[0.02em]"
             style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}
           >
             Data health
@@ -77,7 +77,7 @@ export function DataHealthPanel({ items }: Props) {
             className="flex items-center justify-between"
           >
             <span
-              className="truncate text-[0.6875rem] font-bold"
+              className="truncate text-[0.75rem] font-bold"
               style={{ color: colors.textPrimary, flex: 1, minWidth: 0, marginRight: 8 }}
             >
               {item.asset}
