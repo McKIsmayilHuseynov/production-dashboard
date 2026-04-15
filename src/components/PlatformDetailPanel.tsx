@@ -184,12 +184,9 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
             marginBottom: 10,
           }}
         >
-          <div className="flex items-center gap-2" style={{ marginBottom: 8 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2C12 2 6 10 6 14a6 6 0 0 0 12 0c0-4-6-12-6-12Z" fill={colors.oil} opacity={0.3} stroke={colors.oil} strokeWidth={1.5} />
-            </svg>
-            <span className="text-[0.6875rem] font-bold" style={{ color: colors.oil }}>Oil metrics</span>
-          </div>
+          <h3 className="text-[0.75rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
+            Oil metrics
+          </h3>
           <div className="flex" style={{ gap: 16 }}>
             <MetricBlock label="Yesterday" value={platform.ytdAvg.toLocaleString()} unit="bbl/d" pct={(platform.ytdAvg / plan) * 100} barColor={colors.oil} />
             <MetricBlock label="YTD average" value={platform.ytdAvg.toLocaleString()} unit="bbl/d" pct={(platform.ytdAvg / plan) * 100} barColor={BLUE_MID} />
@@ -197,12 +194,9 @@ export function PlatformDetailPanel({ platform, type, onClose }: Props) {
           </div>
 
           <div style={{ borderTop: `1px solid ${panelColors.divider}`, marginTop: 10, paddingTop: 10 }}>
-            <div className="flex items-center gap-2" style={{ marginBottom: 8 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2c1.5 3 4 5.5 4 9a4 4 0 0 1-8 0c0-3.5 2.5-6 4-9Z" fill={colors.gas} opacity={0.3} stroke={colors.gas} strokeWidth={1.5} />
-              </svg>
-              <span className="text-[0.6875rem] font-bold" style={{ color: colors.gas }}>Gas metrics</span>
-            </div>
+            <h3 className="text-[0.75rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
+              Gas metrics
+            </h3>
             <div className="flex" style={{ gap: 16 }}>
               <MetricBlock label="Yesterday" value={Math.round(platform.ytdAvg * 0.68).toLocaleString()} unit="m³/d" pct={68} barColor={colors.gas} />
               <MetricBlock label="YTD average" value={Math.round(platform.ytdAvg * 0.7).toLocaleString()} unit="m³/d" pct={70} barColor={BLUE_MID} />
