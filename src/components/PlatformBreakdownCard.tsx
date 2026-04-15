@@ -2,6 +2,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  LabelList,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -136,7 +137,14 @@ export function PlatformBreakdownCard({ title, platforms, unit, onPlatformClick 
                 const p = platforms.find(pl => pl.name === data.name);
                 if (p) handleClick(p);
               }}
-            />
+            >
+              <LabelList
+                dataKey="today"
+                position="right"
+                formatter={(v: number) => v.toLocaleString()}
+                style={{ fill: colors.textSecondary, fontSize: 10, fontWeight: 600, fontFamily: 'var(--font-sans)' }}
+              />
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
