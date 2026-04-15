@@ -57,9 +57,9 @@ function KpiHero({ label, value, unit, delta, deltaLabel }: {
         borderRadius: 0,
       }}
     >
-      <span className="text-[0.5625rem] font-bold tracking-[0.04em]" style={{ color: colors.textMuted }}>
+      <h3 className="text-[0.75rem] font-bold" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
         {label}
-      </span>
+      </h3>
       <div className="flex items-baseline gap-2 mt-1">
         <span className="tabular-nums text-[1.5rem] font-bold leading-none" style={{ color: colors.textPrimary, fontFamily: 'var(--font-display)' }}>
           {value}
